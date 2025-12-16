@@ -4,6 +4,7 @@ import { updateProfile } from 'firebase/auth';
 import auth from '../firebase/firebase.config';
 import Swal from 'sweetalert2';
 import { AuthContext } from '../Provider/AuthProvider';
+import axios from 'axios';
 
 const Register = () => {
   const {registerWithEmailPassword, setUser, handleGoogleSignin} = useContext(AuthContext);
@@ -11,12 +12,13 @@ const Register = () => {
   const location = useLocation()
   const navigate = useNavigate()
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
         e.preventDefault()
         const email = e.target.email.value;
         const pass = e.target.password.value;
         const name = e.target.name.value;
-        const imageurl = e.target.imageurl.value;
+        const imageurl = e.target.imageurl;
+        const file = imageurl.files[0]
 
         const uppercase = /[A-Z]/;
         const lowercase = /[a-z]/
@@ -43,11 +45,22 @@ const Register = () => {
           return alert("You must include at least one special character.");
         }
 
-        registerWithEmailPassword(email, pass)
+        //imgbb
+        const res = await axios.post(`https://api.imgbb.com/1/upload?key=77a36fc81fc847f9b0040be511b7f0f0`,
+            {image:file},
+            {headers:{
+                "Content-Type":"multipart/form-data"
+
+            }
+        })
+        const mainPhotourl = res.data.data.display_url
+
+        if(res.data.success == true){
+            registerWithEmailPassword(email, pass)
         .then((userCredential) =>{
             //const user = userCredential.user
             updateProfile(auth.currentUser, {
-            displayName: name, photoURL: imageurl
+            displayName: name, photoURL: mainPhotourl
             }).then(() => {
                 setUser(userCredential.user)
                 // alert("Registration successful")
@@ -76,6 +89,9 @@ const Register = () => {
         console.log(error)
         //alert(error)
          });
+        }
+
+        
 
   }   
   
@@ -109,8 +125,8 @@ const Register = () => {
                 <label className="label text-gray-800">Name</label>
                 <input name='name' type="text" className="input" placeholder="Enter your name" required/>
 
-                <label className="label text-gray-800">Image URL</label>
-                <input name='imageurl' type="text" className="input" placeholder="Image URL" />
+                <label className="label text-gray-800">Image</label>
+                <input name='imageurl' type="file" className="input" placeholder="Image URL" />
 
                 <label className="label text-gray-800">Email</label>
                 <input name='email'type="email" className="input" placeholder="Email" required/>
