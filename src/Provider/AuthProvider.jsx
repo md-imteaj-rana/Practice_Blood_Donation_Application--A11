@@ -52,14 +52,15 @@ const AuthProvider = ({children}) => {
             })
     }, [user])
 
-    console.log(role)
+    // console.log(role)
 
     const authData = {
         registerWithEmailPassword,
         setUser,
         user,
         handleGoogleSignin,
-        loading
+        loading,
+        role
     }
 
   return <AuthContext value={authData}>

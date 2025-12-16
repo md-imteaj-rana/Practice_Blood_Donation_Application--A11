@@ -12,13 +12,27 @@ const Register = () => {
   const location = useLocation()
   const navigate = useNavigate()
 
-  const handleSubmit = async (e) => {
-        e.preventDefault()
-        const email = e.target.email.value;
-        const pass = e.target.password.value;
-        const name = e.target.name.value;
-        const imageurl = e.target.imageurl;
-        const file = imageurl.files[0]
+    const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const email = e.target.email.value;
+    const pass = e.target.password.value;
+    const confirmPass = e.target.confirm_password.value;
+    const name = e.target.name.value;
+    const bloodGroup = e.target.bloodGroup.value;
+    const district = e.target.district.value;
+    const upazila = e.target.upazila.value;
+    const imageurl = e.target.imageurl;
+    const file = imageurl.files[0];
+
+    if (pass !== confirmPass) {
+        return Swal.fire({
+        icon: "error",
+        title: "Password mismatch",
+        text: "Password and Confirm Password must be same"
+        });
+    }
+
 
         const uppercase = /[A-Z]/;
         const lowercase = /[a-z]/
@@ -159,7 +173,7 @@ const Register = () => {
             </div>
 
             {/* Right Section – Signup Card */}
-            <div className="card bg-white w-full max-w-md shadow-2xl rounded-2xl">
+            <div className="card bg-white w-full max-w-md shadow-2xl rounded-2xl my-10">
             <div className="card-body space-y-4">
                 <h2 className="text-2xl font-bold text-center text-gray-800">
                 Create Your Account
@@ -199,6 +213,44 @@ const Register = () => {
                 </div>
 
                 <div>
+                <label className="label font-medium">Blood Group</label>
+                <select name="bloodGroup" className="select select-bordered w-full" required>
+                    <option value="">Select Blood Group</option>
+                    <option>A+</option>
+                    <option>A-</option>
+                    <option>B+</option>
+                    <option>B-</option>
+                    <option>AB+</option>
+                    <option>AB-</option>
+                    <option>O+</option>
+                    <option>O-</option>
+                </select>
+                </div>
+
+                <div>
+                <label className="label font-medium">District</label>
+                <select name="district" className="select select-bordered w-full" required>
+                    <option value="">Select District</option>
+                    <option>Dhaka</option>
+                    <option>Chattogram</option>
+                    <option>Rajshahi</option>
+                    <option>Khulna</option>
+                </select>
+                </div>
+
+                <div>
+                <label className="label font-medium">Upazila</label>
+                <select name="upazila" className="select select-bordered w-full" required>
+                    <option value="">Select Upazila</option>
+                    <option>Savar</option>
+                    <option>Dhanmondi</option>
+                    <option>Mirpur</option>
+                </select>
+                </div>
+
+
+
+                <div>
                     <label className="label font-medium text-gray-700">Password</label>
                     <input
                     name="password"
@@ -208,6 +260,18 @@ const Register = () => {
                     required
                     />
                 </div>
+
+                <div>
+                <label className="label font-medium">Confirm Password</label>
+                <input
+                    name="confirm_password"
+                    type="password"
+                    className="input input-bordered w-full"
+                    placeholder="Confirm your password"
+                    required
+                />
+                </div>
+
 
                 <button className="btn w-full bg-red-600 hover:bg-red-700 text-white rounded-xl mt-2">
                     Sign Up
