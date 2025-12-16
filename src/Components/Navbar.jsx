@@ -75,7 +75,7 @@ const Navbar = () => {
         </div>
 
     
-
+    <Link to={'/Dashboard/main'} className="btn px-6 btn-primary shadow-none bg-gray-800">Dashboard</Link>
     {
     user && <div className="navbar-end">
     <button onClick={handleSignOut} className="btn px-6 btn-primary shadow-none bg-gray-800">Logout</button>

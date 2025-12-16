@@ -5,6 +5,9 @@ import Login from "../Pages/Login";
 import Register from "../Pages/Register";
 
 import MyProfile from "../Pages/MyProfile";
+import MainDashboard from "../Pages/Dashboard/MainDashboard/MainDashboard";
+import DashboardLayout from "../DashboardLayout/DashboardLayout";
+
 
 const router = createBrowserRouter([
   {
@@ -29,6 +32,17 @@ const router = createBrowserRouter([
         }
     ]
   },
+
+  {
+    path: '/Dashboard',
+    element: <DashboardLayout></DashboardLayout>,
+    children:[
+        {
+            path:'main',
+            element: <MainDashboard></MainDashboard>
+        }
+    ]
+  }
 ]);
 
 
