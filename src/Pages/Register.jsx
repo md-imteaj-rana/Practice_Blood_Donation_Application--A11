@@ -1,13 +1,13 @@
 import React, { useContext } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router'
 import { updateProfile } from 'firebase/auth';
-import auth from '../firebase/firebase.config';
 import Swal from 'sweetalert2';
 import { AuthContext } from '../Provider/AuthProvider';
 import axios from 'axios';
+import auth from '../firebase/firebase.config';
 
 const Register = () => {
-  const {registerWithEmailPassword, setUser, handleGoogleSignin} = useContext(AuthContext);
+  const {registerWithEmailPassword, setUser, user, handleGoogleSignin} = useContext(AuthContext);
 
   const location = useLocation()
   const navigate = useNavigate()
@@ -55,6 +55,13 @@ const Register = () => {
         })
         const mainPhotourl = res.data.data.display_url
 
+        const formData = {
+            email,
+            pass, 
+            name, 
+            photoURL: mainPhotourl
+        }
+
         if(res.data.success == true){
             registerWithEmailPassword(email, pass)
         .then((userCredential) =>{
@@ -63,6 +70,13 @@ const Register = () => {
             displayName: name, photoURL: mainPhotourl
             }).then(() => {
                 setUser(userCredential.user)
+                axios.post('http://localhost:5000/users',formData)
+                .then(res => {
+                    console.log(res.data)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
                 // alert("Registration successful")
                 Swal.fire({
                 title: "Registration successful",
@@ -92,8 +106,11 @@ const Register = () => {
         }
 
         
+        
 
   }   
+
+  console.log(user)
   
   const googleSignup = () => {
     handleGoogleSignin()
