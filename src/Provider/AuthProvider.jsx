@@ -13,6 +13,7 @@ const AuthProvider = ({children}) => {
     const [user, setUser] = useState(null);
 
     const [role, setRole] = useState('')
+    const [status, setStatus] = useState('')
 
 
     const registerWithEmailPassword = (email,pass) => {
@@ -46,6 +47,7 @@ const AuthProvider = ({children}) => {
         axios.get(`http://localhost:5000/users/role/${user.email}`)
             .then( res => {
                 setRole(res.data.role)
+                setStatus(res.data.status)
                 
             })
     }, [user])
@@ -57,7 +59,8 @@ const AuthProvider = ({children}) => {
         setUser,
         user,
         loading,
-        role
+        role,
+        status
     }
 
   return <AuthContext value={authData}>
