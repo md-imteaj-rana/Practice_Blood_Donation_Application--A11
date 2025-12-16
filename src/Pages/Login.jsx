@@ -7,7 +7,7 @@ import { AuthContext } from '../Provider/AuthProvider'
 
 const Login = () => {
 
-  const {setUser, handleGoogleSignin} = useContext(AuthContext)
+  const {setUser} = useContext(AuthContext)
 
   const location = useLocation()
   const navigate = useNavigate()
@@ -40,20 +40,7 @@ const Login = () => {
       }
       //console.log(user)
 
-      const googleSignin = () => {
-      handleGoogleSignin()
-      .then(result => {
-        const user = result.user
-        setUser({
-          ...user,
-          displayName: user.displayName || "User",
-          photoURL: user.photoURL || "https://i.ibb.co/default-avatar.png"
-        })
-        // alert("Login success.")
-        navigate(location.state ? location.state : '/')
-      })
-      .catch(err => console.log(err))
-    }
+      
 
     const handleForget = () => {
     navigate(`/ForgetPass/${email}`)
@@ -151,27 +138,6 @@ const Login = () => {
                     Login
                 </button>
 
-                <div className="divider">OR</div>
-
-                <button
-                    type="button"
-                    onClick={googleSignin}
-                    className="btn w-full bg-white text-gray-800 border border-gray-300 rounded-xl hover:bg-gray-100"
-                >
-                    <svg
-                    aria-label="Google logo"
-                    width="18"
-                    height="18"
-                    viewBox="0 0 512 512"
-                    className="mr-2"
-                    >
-                    <path fill="#34a853" d="M153 292c30 82 118 95 171 60h62v48A192 192 0 0190 341" />
-                    <path fill="#4285f4" d="m386 400a140 175 0 0053-179H260v74h102q-7 37-38 57" />
-                    <path fill="#fbbc02" d="m90 341a208 200 0 010-171l63 49q-12 37 0 73" />
-                    <path fill="#ea4335" d="m153 219c22-69 116-109 179-50l55-54c-78-75-230-72-297 55" />
-                    </svg>
-                    Login with Google
-                </button>
 
                 </form>
             </div>

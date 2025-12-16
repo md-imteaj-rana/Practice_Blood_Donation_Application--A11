@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from 'react-router'
 import { signOut } from 'firebase/auth'
 import auth from '../firebase/firebase.config'
 import { AuthContext } from '../Provider/AuthProvider'
+import Swal from 'sweetalert2'
 
 const Navbar = () => {
     const {user} = useContext(AuthContext)
@@ -14,7 +15,11 @@ const Navbar = () => {
 
   const handleSignOut = () => {
     signOut(auth)
-    alert("Logout success.")
+    Swal.fire({
+              title: "LogOut success",
+              icon: "success",
+              draggable: true
+            });
     navigate(location.state - '/');
   }
 
