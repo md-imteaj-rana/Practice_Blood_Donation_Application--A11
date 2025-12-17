@@ -31,7 +31,7 @@ const DashboardAside = () => {
 
         {/* Dashboard Home */}
         <NavLink
-          to="/dashboard"
+          to="/Dashboard"
           end
           className={({ isActive }) =>
             `${navItemStyle} ${isActive ? activeStyle : ""}`
@@ -43,7 +43,7 @@ const DashboardAside = () => {
 
         {/* Profile */}
         <NavLink
-          to="/dashboard/profile"
+          to="/Dashboard/profile"
           className={({ isActive }) =>
             `${navItemStyle} ${isActive ? activeStyle : ""}`
           }
@@ -54,7 +54,7 @@ const DashboardAside = () => {
 
         {/* Create Donation Request */}
         <NavLink
-          to="/dashboard/create-donation-request"
+          to="/Dashboard/create-request"
           className={({ isActive }) =>
             `${navItemStyle} ${isActive ? activeStyle : ""}`
           }
@@ -65,7 +65,7 @@ const DashboardAside = () => {
 
         {/* My Donation Requests */}
         <NavLink
-          to="/dashboard/my-donation-requests"
+          to="/Dashboard/my-requests"
           className={({ isActive }) =>
             `${navItemStyle} ${isActive ? activeStyle : ""}`
           }
@@ -76,7 +76,7 @@ const DashboardAside = () => {
 
         {/* All Users (Admin later) */}
         <NavLink
-          to="/dashboard/all-users"
+          to="/Dashboard/all-users"
           className={({ isActive }) =>
             `${navItemStyle} ${isActive ? activeStyle : ""}`
           }
@@ -87,7 +87,7 @@ const DashboardAside = () => {
 
         {/* All Blood Donation Requests */}
         <NavLink
-          to="/dashboard/all-blood-donation-request"
+          to="/Dashboard/all-request"
           className={({ isActive }) =>
             `${navItemStyle} ${isActive ? activeStyle : ""}`
           }

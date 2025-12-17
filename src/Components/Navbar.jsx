@@ -70,7 +70,7 @@ const Navbar = () => {
         <div className="flex items-center gap-4">
           {!user ? (
             <Link
-              to="/login"
+              to="/Login"
               className="hidden md:inline-block px-5 py-2 rounded-md bg-red-600 text-white font-medium hover:bg-red-700 transition"
             >
               Login
@@ -88,7 +88,7 @@ const Navbar = () => {
               {open && (
                 <div className="absolute right-0 mt-3 w-48 bg-white rounded-md shadow-lg z-50">
                   <Link
-                    to="/dashboard"
+                    to="/Dashboard"
                     onClick={() => setOpen(false)}
                     className="block px-4 py-2 text-gray-700 hover:bg-red-50"
                   >
