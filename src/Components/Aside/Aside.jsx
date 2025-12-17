@@ -6,7 +6,7 @@ import {
   Users,
   Droplet,
 } from "lucide-react";
-import { NavLink } from "react-router";
+import { Link, NavLink } from "react-router";
 
 const DashboardAside = () => {
   const navItemStyle =
@@ -17,6 +17,7 @@ const DashboardAside = () => {
   return (
     <aside className="w-64 min-h-screen bg-white border-r shadow-sm fixed">
       {/* Logo */}
+      <Link to={'/'}>
       <div className="p-5 text-center border-b">
         <h1 className="text-2xl font-bold text-red-600">
           Blood<span className="text-gray-800">Connect</span>
@@ -25,6 +26,7 @@ const DashboardAside = () => {
           Dashboard Panel
         </p>
       </div>
+      </Link>
 
       {/* Menu */}
       <nav className="p-4 space-y-1 text-gray-700">
