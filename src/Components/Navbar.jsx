@@ -1,88 +1,178 @@
-import React, { useContext } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router'
+import { Link, NavLink } from "react-router";
+import { useContext, useState, useRef, useEffect } from "react";
+import { signOut } from "firebase/auth";
+import Swal from "sweetalert2";
 
-import { signOut } from 'firebase/auth'
-import auth from '../firebase/firebase.config'
-import { AuthContext } from '../Provider/AuthProvider'
-import Swal from 'sweetalert2'
+import auth from "../firebase/firebase.config";
+import { AuthContext } from "../Provider/AuthProvider";
 
 const Navbar = () => {
-    const {user} = useContext(AuthContext)
-  const location = useLocation()
-  const navigate = useNavigate()
+  const { user } = useContext(AuthContext);
+
+  const [open, setOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
   
+  useEffect(() => {
+    const handler = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
 
-  const handleSignOut = () => {
-    signOut(auth)
+  const handleLogout = async () => {
+    await signOut(auth);
+    setOpen(false);
+    setMobileOpen(false);
     Swal.fire({
-              title: "LogOut success",
-              icon: "success",
-              draggable: true
-            });
-    navigate(location.state - '/');
-  }
+      title: "Logged out successfully",
+      icon: "success",
+    });
+    window.location.href = "/";
+  };
+
+  const navLinkClass =
+    "text-gray-700 hover:text-red-600 font-medium transition";
 
   return (
-    <div className=''>
-      <div className="navbar bg-base-100 shadow-sm px-8">
-        <div className="navbar-start">
-            <div className="dropdown">
-            <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /> </svg>
+    <nav className="bg-white shadow-md">
+      <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+        
+        <Link to="/" className="flex items-center gap-2">
+          <span className="text-2xl">🩸</span>
+          <span className="text-xl font-semibold text-gray-800">
+            BloodConnect
+          </span>
+        </Link>
+
+        
+        <div className="hidden md:flex items-center gap-6">
+          <NavLink to="/" className={navLinkClass}>
+            Home
+          </NavLink>
+
+          <NavLink to="/donation-requests" className={navLinkClass}>
+            Donation Requests
+          </NavLink>
+
+          {user && (
+            <NavLink to="/funding" className={navLinkClass}>
+              Funding
+            </NavLink>
+          )}
+        </div>
+
+        
+        <div className="flex items-center gap-4">
+          {!user ? (
+            <Link
+              to="/login"
+              className="hidden md:inline-block px-5 py-2 rounded-md bg-red-600 text-white font-medium hover:bg-red-700 transition"
+            >
+              Login
+            </Link>
+          ) : (
+            <div className="relative hidden md:block" ref={dropdownRef}>
+              <button onClick={() => setOpen(!open)}>
+                <img
+                  src={user.photoURL || "https://i.ibb.co/2kR7G6C/user.png"}
+                  alt="avatar"
+                  className="w-10 h-10 rounded-full border-2 border-red-500"
+                />
+              </button>
+
+              {open && (
+                <div className="absolute right-0 mt-3 w-48 bg-white rounded-md shadow-lg z-50">
+                  <Link
+                    to="/dashboard"
+                    onClick={() => setOpen(false)}
+                    className="block px-4 py-2 text-gray-700 hover:bg-red-50"
+                  >
+                    Dashboard
+                  </Link>
+
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-left px-4 py-2 text-gray-700 hover:bg-red-50"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
             </div>
-            <ul
-                tabIndex="-1"
-                className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-                <li><Link to="/">Home</Link></li>
-                
-                {
-                  user && (
-                    <>
-                    
-                    <li><Link to="/AddService">Donation requests</Link></li>
-                    <li><Link to="/MyServices">My Listings</Link></li>
-                    
-                    </>
-                  )
-                }
-            </ul>
-            </div>
-            <Link to={'/'} className="btn btn-ghost text-2xl font-bold -ml-4.5">Blood Connect</Link>
+          )}
 
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="md:hidden text-2xl"
+          >
+            ☰
+          </button>
         </div>
-        <div className="navbar-center hidden lg:flex">
-            <ul className="menu menu-horizontal px-1">
-            <li><Link to="/">Home</Link></li>
-            
-            {
-                  user && (
-                    <>
-                    
-                    <li><Link to="/AddService">Donation requests</Link></li>
-                    <li><Link to="/MyServices">Funding Links</Link></li>
-                    
-                    </>
-                  )
-                }
-            </ul>
-        </div>
+      </div>
 
-    
-    <Link to={'/Dashboard/main'} className="btn px-6 btn-primary shadow-none bg-gray-800">Dashboard</Link>
-    {
-    user && <div className="navbar-end">
-    <button onClick={handleSignOut} className="btn px-6 btn-primary shadow-none bg-gray-800">Logout</button>
-    </div>
-    }
-    {
-    !user && <div className="navbar-end">
-    <Link to={'/Login'} className="btn px-6 btn-primary shadow-none bg-gray-800">Login</Link>
-    </div>
-    }
-        </div>
-    </div>
-  )
-}
+      {mobileOpen && (
+        <div className="md:hidden bg-white shadow-lg px-4 py-4 space-y-3 grid grid-cols-1">
+          <NavLink
+            to="/"
+            onClick={() => setMobileOpen(false)}
+            className={navLinkClass}
+          >
+            Home
+          </NavLink>
 
-export default Navbar
+          <NavLink
+            to="/donation-requests"
+            onClick={() => setMobileOpen(false)}
+            className={navLinkClass}
+          >
+            Donation Requests
+          </NavLink>
+
+          {user && (
+            <NavLink
+              to="/funding"
+              onClick={() => setMobileOpen(false)}
+              className={navLinkClass}
+            >
+              Funding
+            </NavLink>
+          )}
+
+          {!user ? (
+            <Link
+              to="/login"
+              onClick={() => setMobileOpen(false)}
+              className="block px-5 py-2 rounded-md bg-red-600 text-white font-medium hover:bg-red-700 transition"
+            >
+              Login
+            </Link>
+          ) : (
+            <>
+              <Link
+                to="/dashboard"
+                onClick={() => setMobileOpen(false)}
+                className="block text-gray-700 hover:text-red-600 font-medium"
+              >
+                Dashboard
+              </Link>
+
+              <button
+                onClick={handleLogout}
+                className="block text-left text-gray-700 hover:text-red-600 font-medium"
+              >
+                Logout
+              </button>
+            </>
+          )}
+        </div>
+      )}
+    </nav>
+  );
+};
+
+export default Navbar;

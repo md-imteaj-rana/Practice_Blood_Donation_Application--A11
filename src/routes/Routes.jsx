@@ -7,6 +7,7 @@ import Register from "../Pages/Register";
 import MyProfile from "../Pages/MyProfile";
 import MainDashboard from "../Pages/Dashboard/MainDashboard/MainDashboard";
 import DashboardLayout from "../DashboardLayout/DashboardLayout";
+import PrivateRoutes from "./PrivateRoutes";
 
 
 const router = createBrowserRouter([
@@ -35,11 +36,11 @@ const router = createBrowserRouter([
 
   {
     path: '/Dashboard',
-    element: <DashboardLayout></DashboardLayout>,
+    element: <PrivateRoutes><DashboardLayout></DashboardLayout></PrivateRoutes>,
     children:[
         {
             path:'main',
-            element: <MainDashboard></MainDashboard>
+            element: <PrivateRoutes><MainDashboard></MainDashboard></PrivateRoutes>
         }
     ]
   }
