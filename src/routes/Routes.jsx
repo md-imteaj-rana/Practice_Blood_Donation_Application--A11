@@ -8,6 +8,9 @@ import DashboardLayout from "../DashboardLayout/DashboardLayout";
 import PrivateRoutes from "./PrivateRoutes";
 import CreateRequest from "../Pages/Dashboard/CreateRequest/CreateRequest";
 import AllRequests from "../Pages/Dashboard/AllRequests/AllRequests";
+import MyRequests from "../Pages/Dashboard/MyRequests/MyRequests";
+import Profile from "../Pages/Dashboard/Profile/Profile";
+import AllUsers from "../Pages/Dashboard/AllUsers/AllUsers";
 
 
 const router = createBrowserRouter([
@@ -46,6 +49,18 @@ const router = createBrowserRouter([
         {
             path: 'all-request',
             element: <PrivateRoutes><AllRequests></AllRequests></PrivateRoutes>
+        },
+        {
+            path: 'my-requests',
+            element: <PrivateRoutes><MyRequests></MyRequests></PrivateRoutes>
+        },
+        {
+            path: 'profile',
+            element: <PrivateRoutes><Profile></Profile></PrivateRoutes>
+        },
+        {
+            path: 'all-users',
+            element: <PrivateRoutes><AllUsers></AllUsers></PrivateRoutes>
         }
     ]
   }

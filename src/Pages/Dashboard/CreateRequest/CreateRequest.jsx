@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 const CreateRequest = () => {
     
     const {user} = useContext(AuthContext)
-    console.log(user?.name)
+    //console.log(user?.displayName)
 
     // fetch districts
       const [districts, setDistricts] = useState([]);
@@ -104,7 +104,7 @@ const CreateRequest = () => {
             name="requesterName"
             type="text"
             readOnly
-            value={user?.name}
+            value={user?.displayName}
             className="w-full px-4 py-2 border rounded-md bg-gray-100 cursor-not-allowed"
           />
         </div>
