@@ -1,13 +1,10 @@
-
 import {
   LayoutDashboard,
   User,
-  Droplet,
+  PlusCircle,
+  List,
   Users,
-  HeartPulse,
-  FileText,
-  Settings,
-  LogOut,
+  Droplet,
 } from "lucide-react";
 import { NavLink } from "react-router";
 
@@ -18,94 +15,88 @@ const DashboardAside = () => {
   const activeStyle = "bg-red-600 text-white";
 
   return (
-    <aside className="w-64 min-h-screen bg-white border-r shadow-sm">
+    <aside className="w-64 min-h-screen bg-white border-r shadow-sm fixed">
       {/* Logo */}
       <div className="p-5 text-center border-b">
         <h1 className="text-2xl font-bold text-red-600">
-          Blood<span className="text-gray-800"> Connect</span>
+          Blood<span className="text-gray-800">Connect</span>
         </h1>
+        <p className="text-xs text-gray-500 mt-1">
+          Dashboard Panel
+        </p>
       </div>
 
       {/* Menu */}
       <nav className="p-4 space-y-1 text-gray-700">
+
+        {/* Dashboard Home */}
         <NavLink
           to="/dashboard"
+          end
           className={({ isActive }) =>
-            `${navItemStyle} ${isActive && activeStyle}`
+            `${navItemStyle} ${isActive ? activeStyle : ""}`
           }
         >
           <LayoutDashboard size={20} />
           Dashboard
         </NavLink>
 
+        {/* Profile */}
         <NavLink
           to="/dashboard/profile"
           className={({ isActive }) =>
-            `${navItemStyle} ${isActive && activeStyle}`
+            `${navItemStyle} ${isActive ? activeStyle : ""}`
           }
         >
           <User size={20} />
           Profile
         </NavLink>
 
+        {/* Create Donation Request */}
         <NavLink
-          to="/dashboard/donate"
+          to="/dashboard/create-donation-request"
           className={({ isActive }) =>
-            `${navItemStyle} ${isActive && activeStyle}`
+            `${navItemStyle} ${isActive ? activeStyle : ""}`
           }
         >
-          <Droplet size={20} />
-          Donate Blood
+          <PlusCircle size={20} />
+          Create Request
         </NavLink>
 
+        {/* My Donation Requests */}
         <NavLink
-          to="/dashboard/donors"
+          to="/dashboard/my-donation-requests"
           className={({ isActive }) =>
-            `${navItemStyle} ${isActive && activeStyle}`
+            `${navItemStyle} ${isActive ? activeStyle : ""}`
+          }
+        >
+          <List size={20} />
+          My Requests
+        </NavLink>
+
+        {/* All Users (Admin later) */}
+        <NavLink
+          to="/dashboard/all-users"
+          className={({ isActive }) =>
+            `${navItemStyle} ${isActive ? activeStyle : ""}`
           }
         >
           <Users size={20} />
-          Find Donors
+          All Users
         </NavLink>
 
+        {/* All Blood Donation Requests */}
         <NavLink
-          to="/dashboard/requests"
+          to="/dashboard/all-blood-donation-request"
           className={({ isActive }) =>
-            `${navItemStyle} ${isActive && activeStyle}`
+            `${navItemStyle} ${isActive ? activeStyle : ""}`
           }
         >
-          <HeartPulse size={20} />
-          Blood Requests
+          <Droplet size={20} />
+          All Requests
         </NavLink>
 
-        <NavLink
-          to="/dashboard/reports"
-          className={({ isActive }) =>
-            `${navItemStyle} ${isActive && activeStyle}`
-          }
-        >
-          <FileText size={20} />
-          Reports
-        </NavLink>
-
-        <NavLink
-          to="/dashboard/settings"
-          className={({ isActive }) =>
-            `${navItemStyle} ${isActive && activeStyle}`
-          }
-        >
-          <Settings size={20} />
-          Settings
-        </NavLink>
       </nav>
-
-      {/* Logout */}
-      <div className="absolute bottom-4 w-full px-4">
-        <button className="flex items-center gap-3 w-full px-4 py-2 text-red-600 hover:bg-red-100 rounded-md">
-          <LogOut size={20} />
-          Logout
-        </button>
-      </div>
     </aside>
   );
 };
