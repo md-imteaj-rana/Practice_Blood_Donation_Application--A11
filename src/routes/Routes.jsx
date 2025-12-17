@@ -7,6 +7,7 @@ import MainDashboard from "../Pages/Dashboard/MainDashboard/MainDashboard";
 import DashboardLayout from "../DashboardLayout/DashboardLayout";
 import PrivateRoutes from "./PrivateRoutes";
 import CreateRequest from "../Pages/Dashboard/CreateRequest/CreateRequest";
+import AllRequests from "../Pages/Dashboard/AllRequests/AllRequests";
 
 
 const router = createBrowserRouter([
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
         {
             path:'create-request',
             element: <PrivateRoutes><CreateRequest></CreateRequest></PrivateRoutes>
+        },
+        {
+            path: 'all-request',
+            element: <PrivateRoutes><AllRequests></AllRequests></PrivateRoutes>
         }
     ]
   }

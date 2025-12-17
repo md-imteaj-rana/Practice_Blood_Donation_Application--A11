@@ -1,7 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../../../Provider/AuthProvider";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 const CreateRequest = () => {
     
+    const {user} = useContext(AuthContext)
+    console.log(user?.name)
+
     // fetch districts
       const [districts, setDistricts] = useState([]);
     
@@ -59,6 +65,20 @@ const CreateRequest = () => {
             message
         }
         console.log(formData)
+
+        axios.post(`http://localhost:5000/requests`, formData)
+        .then(res => {
+            //console.log(res.data)
+            Swal.fire({
+            title: "Created request.",
+            icon: "success",
+            draggable: true
+            });
+            form.reset()
+        })
+        .catch(err => {
+            console.log(err)
+        })
       }
   return (
     <div className="max-w-4xl mx-auto">
@@ -84,7 +104,7 @@ const CreateRequest = () => {
             name="requesterName"
             type="text"
             readOnly
-            value="John Doe"
+            value={user?.name}
             className="w-full px-4 py-2 border rounded-md bg-gray-100 cursor-not-allowed"
           />
         </div>
@@ -98,7 +118,7 @@ const CreateRequest = () => {
             name="requesterEmail"
             type="email"
             readOnly
-            value="john@email.com"
+            value={user?.email}
             className="w-full px-4 py-2 border rounded-md bg-gray-100 cursor-not-allowed"
           />
         </div>
