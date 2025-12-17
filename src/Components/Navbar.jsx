@@ -35,39 +35,33 @@ const Navbar = () => {
                 tabIndex="-1"
                 className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
                 <li><Link to="/">Home</Link></li>
-                <li>
-                <Link to="/Services">Pets & Supplies</Link>
-                </li>
+                
                 {
                   user && (
                     <>
-                    <li><Link to="/Profile">My profile</Link></li>
+                    
                     <li><Link to="/AddService">Donation requests</Link></li>
                     <li><Link to="/MyServices">My Listings</Link></li>
-                    <li><Link to="/MyOrders">My Orders</Link></li>
+                    
                     </>
                   )
                 }
             </ul>
             </div>
-            <Link to={'/'} className="btn btn-ghost text-2xl font-bold -ml-4.5">Blood Donation</Link>
+            <Link to={'/'} className="btn btn-ghost text-2xl font-bold -ml-4.5">Blood Connect</Link>
 
         </div>
         <div className="navbar-center hidden lg:flex">
             <ul className="menu menu-horizontal px-1">
             <li><Link to="/">Home</Link></li>
-            <li>
-                
-                <Link to='/Services'>Pets & Supplies</Link>
-    
-            </li>
+            
             {
                   user && (
                     <>
-                    <li><Link to="/Profile">My profile</Link></li>
+                    
                     <li><Link to="/AddService">Donation requests</Link></li>
                     <li><Link to="/MyServices">Funding Links</Link></li>
-                    <li><Link to="/MyOrders">My Orders</Link></li>
+                    
                     </>
                   )
                 }
