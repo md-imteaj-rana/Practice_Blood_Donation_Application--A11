@@ -16,7 +16,38 @@ const DashboardAside = () => {
 
   return (
     <div>
-      
+      <div className="navbar bg-base-100 shadow-sm md:hidden">
+      <div className="navbar-start">
+        <div className="dropdown">
+          <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /> </svg>
+          </div>
+          <ul
+            tabIndex="-1"
+            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
+            <Link to={'/Dashboard'}><a>Dashboard</a></Link>
+            <Link to={'/Dashboard/profile'}><a>Profile</a></Link>
+            <Link to={'/Dashboard/create-request'}><a>Create Request</a></Link>
+            <Link to={'/Dashboard/my-requests'}><a>My Requests</a></Link>
+            <Link to={'/Dashboard/all-users'}><a>All Users</a></Link>
+            <Link to={'/Dashboard/all-request'}><a>All Requests</a></Link>
+            
+          </ul>
+        </div>
+
+        <Link to={'/'}>
+      <div className="p-5 text-center">
+        <h1 className="text-2xl font-bold text-red-600">
+          Blood<span className="text-gray-800">Connect</span>
+        </h1>
+        
+      </div>
+      </Link>
+
+        
+      </div>
+    </div>
+
     <aside className="w-64 min-h-screen bg-white border-r shadow-sm fixed hidden md:block">
       {/* Logo */}
       <Link to={'/'}>
@@ -78,7 +109,7 @@ const DashboardAside = () => {
           My Requests
         </NavLink>
 
-        {/* All Users (Admin later) */}
+        {/* All Users*/}
         <NavLink
           to="/Dashboard/all-users"
           className={({ isActive }) =>

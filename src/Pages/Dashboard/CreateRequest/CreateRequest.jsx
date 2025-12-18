@@ -8,6 +8,8 @@ const CreateRequest = () => {
     const {user} = useContext(AuthContext)
     //console.log(user?.displayName)
 
+    const [selectedDistricts, setSelectedDistricts] = useState(null)
+
     // fetch districts
       const [districts, setDistricts] = useState([]);
     
@@ -32,6 +34,8 @@ const CreateRequest = () => {
         e.preventDefault();
         const distId = e.target.value;
         const resultUpa = upazilas.filter(u => u.district_id == distId)
+        const district = districts.find(d => d.id == distId)
+        setSelectedDistricts(district)
         setSelectedUpazia(resultUpa)
         //console.log(resultUpa)
       };
@@ -43,7 +47,7 @@ const CreateRequest = () => {
         const requesterEmail = form.requesterEmail.value
         const recipientName = form.recipientName.value
         const bloodGroup = form.bloodGroup.value
-        const recipientDistrict = form.recipientDistrict.value
+        const recipientDistrict = selectedDistricts.name
         const recipientUpazila = form.recipientUpazila.value
         const hospital = form.hospital.value
         const address = form.address.value
@@ -184,7 +188,7 @@ const CreateRequest = () => {
                   >
                     <option value="">Select Upazila</option>
                     {selectedUpazila.map((upazila) => (
-                      <option value={upazila?.district_id}>
+                      <option value={upazila?.name}>
                         {upazila?.name}
                       </option>
                     ))}

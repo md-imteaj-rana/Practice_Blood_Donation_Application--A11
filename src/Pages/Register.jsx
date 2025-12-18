@@ -25,6 +25,9 @@ const Register = () => {
   // fetch upazilas
   const [upazilas, setUpazilas] = useState([]);
   const [selectedUpazila, setSelectedUpazia] = useState([]);
+
+  const [selectedDistricts, setSelectedDistricts] = useState(null)
+
   useEffect(() => {
     fetch(`/Upazilas.json`)
       .then((res) => res.json())
@@ -36,8 +39,10 @@ const Register = () => {
     e.preventDefault();
     const distId = e.target.value;
     const resultUpa = upazilas.filter(u => u.district_id == distId)
+    const district = districts.find(d => d.id == distId)
+    setSelectedDistricts(district)
     setSelectedUpazia(resultUpa)
-    //console.log(resultUpa)
+    console.log(resultUpa)
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -47,7 +52,7 @@ const Register = () => {
     const confirmPass = e.target.confirm_password.value;
     const name = e.target.name.value;
     const bloodGroup = e.target.bloodGroup.value;
-    const district = e.target.district.value;
+    const district = selectedDistricts.name;
     const upazila = e.target.upazila.value;
     const imageurl = e.target.imageurl;
     const file = imageurl.files[0];
@@ -273,7 +278,7 @@ const Register = () => {
                   >
                     <option value="">Select Upazila</option>
                     {selectedUpazila.map((upazila) => (
-                      <option value={upazila?.district_id}>
+                      <option value={upazila?.name}>
                         {upazila?.name}
                       </option>
                     ))}
