@@ -15,7 +15,9 @@ const DashboardAside = () => {
   const activeStyle = "bg-red-600 text-white";
 
   return (
-    <aside className="w-64 min-h-screen bg-white border-r shadow-sm fixed">
+    <div>
+      
+    <aside className="w-64 min-h-screen bg-white border-r shadow-sm fixed hidden md:block">
       {/* Logo */}
       <Link to={'/'}>
       <div className="p-5 text-center border-b">
@@ -100,6 +102,7 @@ const DashboardAside = () => {
 
       </nav>
     </aside>
+    </div>
   );
 };
 
