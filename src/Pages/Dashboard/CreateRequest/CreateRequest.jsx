@@ -1,12 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../Provider/AuthProvider";
-import axios from "axios";
 import Swal from "sweetalert2";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const CreateRequest = () => {
     
     const {user} = useContext(AuthContext)
     //console.log(user?.displayName)
+
+    //secure axios
+    const axiosSecure = useAxiosSecure()
 
     const [selectedDistricts, setSelectedDistricts] = useState(null)
 
@@ -70,7 +73,7 @@ const CreateRequest = () => {
         }
         console.log(formData)
 
-        axios.post(`http://localhost:5000/requests`, formData)
+        axiosSecure.post(`/requests`, formData)
         .then(res => {
             //console.log(res.data)
             Swal.fire({

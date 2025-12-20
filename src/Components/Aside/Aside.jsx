@@ -6,9 +6,15 @@ import {
   Users,
   Droplet,
 } from "lucide-react";
+import { useContext } from "react";
 import { Link, NavLink } from "react-router";
+import { AuthContext } from "../../Provider/AuthProvider";
 
 const DashboardAside = () => {
+
+  const {role} = useContext(AuthContext)
+  //console.log(role)
+
   const navItemStyle =
     "flex items-center gap-3 px-4 py-2 rounded-md hover:bg-red-100 transition";
 
@@ -27,9 +33,18 @@ const DashboardAside = () => {
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
             <Link to={'/Dashboard'}><a>Dashboard</a></Link>
             <Link to={'/Dashboard/profile'}><a>Profile</a></Link>
-            <Link to={'/Dashboard/create-request'}><a>Create Request</a></Link>
+            {
+              role == 'donor' && (
+                <Link to={'/Dashboard/create-request'}><a>Create Request</a></Link>
+              )
+            }
+            
             <Link to={'/Dashboard/my-requests'}><a>My Requests</a></Link>
-            <Link to={'/Dashboard/all-users'}><a>All Users</a></Link>
+            {
+              role == 'admin' && (
+                <Link to={'/Dashboard/all-users'}><a>All Users</a></Link>
+              )
+            }
             <Link to={'/Dashboard/all-request'}><a>All Requests</a></Link>
             
           </ul>
@@ -88,15 +103,19 @@ const DashboardAside = () => {
         </NavLink>
 
         {/* Create Donation Request */}
-        <NavLink
-          to="/Dashboard/create-request"
-          className={({ isActive }) =>
-            `${navItemStyle} ${isActive ? activeStyle : ""}`
-          }
-        >
-          <PlusCircle size={20} />
-          Create Request
-        </NavLink>
+        {
+          role == 'donor' && (
+            <NavLink
+              to="/Dashboard/create-request"
+              className={({ isActive }) =>
+                `${navItemStyle} ${isActive ? activeStyle : ""}`
+              }
+            >
+              <PlusCircle size={20} />
+              Create Request
+            </NavLink>
+          )
+        }
 
         {/* My Donation Requests */}
         <NavLink
@@ -110,15 +129,19 @@ const DashboardAside = () => {
         </NavLink>
 
         {/* All Users*/}
-        <NavLink
-          to="/Dashboard/all-users"
-          className={({ isActive }) =>
-            `${navItemStyle} ${isActive ? activeStyle : ""}`
-          }
-        >
-          <Users size={20} />
-          All Users
-        </NavLink>
+        {
+          role == 'admin' && (
+            <NavLink
+              to="/Dashboard/all-users"
+              className={({ isActive }) =>
+                `${navItemStyle} ${isActive ? activeStyle : ""}`
+              }
+            >
+              <Users size={20} />
+              All Users
+            </NavLink>
+          )
+        }
 
         {/* All Blood Donation Requests */}
         <NavLink

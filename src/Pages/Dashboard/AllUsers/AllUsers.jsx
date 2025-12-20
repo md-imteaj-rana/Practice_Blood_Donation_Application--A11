@@ -1,27 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { MoreVertical } from "lucide-react";
-import useAxios from "../../../hooks/useAxios";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
-const initialUsers = [
-  {
-    id: 1,
-    name: "Rahim Uddin",
-    email: "rahim@email.com",
-    role: "donor",
-    status: "active",
-    avatar: "https://i.ibb.co/9gL7wzM/user.png",
-  },
-];
 
 const AllUsers = () => {
-  const [users, setUsers] = useState(initialUsers);
+  const [users, setUsers] = useState([]);
   const [filter, setFilter] = useState("all");
   const [openMenuId, setOpenMenuId] = useState(null);
   const [filteredUsers, setFilteredUsers] = useState(users);
-  const axiosInstance = useAxios();
+  const axiosSecure = useAxiosSecure(); 
 
-  useEffect(() => {
-    axiosInstance
+  const fetchUsers = () => {
+    axiosSecure
       .get(`/users`)
       .then((res) => {
         setUsers(res.data);
@@ -29,7 +19,11 @@ const AllUsers = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [axiosInstance]);
+  }
+
+  useEffect(() => {
+    fetchUsers()
+  }, []);
 
   useEffect(() => {
     if (filter === "all") {
@@ -49,6 +43,15 @@ const AllUsers = () => {
     );
     setOpenMenuId(null);
   };
+
+
+  const handleStatusChange = (email, status) => {
+    axiosSecure.patch(`/update/user/status?email=${email}&status=${status}`)
+    .then(res => {
+      console.log(res.data)
+      fetchUsers();
+    })
+  }
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -112,18 +115,20 @@ const AllUsers = () => {
                 <td className="px-4 py-3 text-center relative">
                   <button
                     onClick={() =>
-                      setOpenMenuId(openMenuId === user.id ? null : user.id)
+                      setOpenMenuId(openMenuId === user._id ? null : user._id)
                     }
                     className="p-2 hover:bg-gray-100 rounded"
                   >
                     <MoreVertical size={18} />
                   </button>
-                  {openMenuId === user.id && (
+                  {openMenuId === user._id && (
+                    
                     <div className="absolute right-6 mt-2 w-44 bg-white border rounded shadow-md z-20 text-left">
-                      {user.status === "active" ? (
+                      {user.status !== "blocked" ? (
                         <button
-                          onClick={() =>
-                            updateUser(user.id, { status: "blocked" })
+                          onClick={() => {
+                            updateUser(user.id, { status: "blocked" }),
+                            handleStatusChange(user?.email, 'blocked')}
                           }
                           className="block w-full px-4 py-2 text-sm hover:bg-gray-100"
                         >
@@ -131,28 +136,31 @@ const AllUsers = () => {
                         </button>
                       ) : (
                         <button
-                          onClick={() =>
-                            updateUser(user.id, { status: "active" })
+                          onClick={() =>{
+                            updateUser(user.id, { status: "active" }),
+                            handleStatusChange(user?.email, 'active')}
                           }
                           className="block w-full px-4 py-2 text-sm hover:bg-gray-100"
                         >
                           Unblock User
                         </button>
                       )}
-                      {user.role !== "volunteer" && (
+                      {user.role !== "volunteer" && user.status == 'active' && (
                         <button
-                          onClick={() =>
-                            updateUser(user.id, { role: "volunteer" })
+                          onClick={() =>{
+                            updateUser(user.id, { role: "volunteer" }),
+                            handleStatusChange(user?.email, 'volunteer')}
                           }
                           className="block w-full px-4 py-2 text-sm hover:bg-gray-100"
                         >
                           Make Volunteer
                         </button>
                       )}
-                      {user.role !== "admin" && (
+                      {user.role !== "admin" && user.status == 'active' && (
                         <button
-                          onClick={() =>
-                            updateUser(user.id, { role: "admin" })
+                          onClick={() =>{
+                            updateUser(user.id, { role: "admin" }),
+                            handleStatusChange(user?.email, 'admin')}
                           }
                           className="block w-full px-4 py-2 text-sm hover:bg-gray-100"
                         >
