@@ -60,7 +60,7 @@ const Navbar = () => {
           </NavLink>
 
           {user && (
-            <NavLink to="/funding" className={navLinkClass}>
+            <NavLink to="/Funding" className={navLinkClass}>
               Funding
             </NavLink>
           )}
@@ -135,7 +135,7 @@ const Navbar = () => {
 
           {user && (
             <NavLink
-              to="/funding"
+              to="/Funding"
               onClick={() => setMobileOpen(false)}
               className={navLinkClass}
             >

@@ -47,7 +47,7 @@ const AuthProvider = ({children}) => {
         if(!user) return;
         axios.get(`http://localhost:5000/users/role/${user.email}`)
             .then( res => {
-                console.log(res)
+                //console.log(res)
                 setRole(res.data.role)
                 setRoleLoading(false)
                 setStatus(res.data.status)

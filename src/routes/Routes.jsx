@@ -11,6 +11,8 @@ import AllRequests from "../Pages/Dashboard/AllRequests/AllRequests";
 import MyRequests from "../Pages/Dashboard/MyRequests/MyRequests";
 import Profile from "../Pages/Dashboard/Profile/Profile";
 import AllUsers from "../Pages/Dashboard/AllUsers/AllUsers";
+import Funding from "../Pages/Funding/Funding";
+import PaymentSuccess from "../Pages/PaymentSuccess/PaymentSuccess";
 
 
 const router = createBrowserRouter([
@@ -29,6 +31,14 @@ const router = createBrowserRouter([
         {
             path: '/Register',
             element: <Register></Register>
+        },
+        {
+            path: '/Funding',
+            element: <PrivateRoutes><Funding></Funding></PrivateRoutes>
+        },
+        {
+            path: '/payment-success',
+            element: <PrivateRoutes><PaymentSuccess></PaymentSuccess></PrivateRoutes>
         }
         
     ]

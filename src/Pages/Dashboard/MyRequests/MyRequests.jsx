@@ -1,22 +1,51 @@
 import React, { useContext, useEffect, useState } from "react";
-import useAxios from "../../../hooks/useAxios";
 import { AuthContext } from "../../../Provider/AuthProvider";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const MyRequests = () => {
 
     const [myRequests, setMyRequests] = useState([])
-    const axiosInstance = useAxios();
+    const [totalMyRequests, setTotalMyRequests] = useState(0)
+    const [itemsPerPage, setItemsPerPage] = useState(10)
+    const [currentPage, setCurrentPage] = useState(1)
+    const axiosSecure = useAxiosSecure();
     const {user} = useContext(AuthContext)
 
     useEffect(() => {
-        axiosInstance.get(`/requests/${user?.email}`)
+        axiosSecure.get(`/requests/${user?.email}?page=${currentPage - 1}&size=${itemsPerPage}`)
         .then(res => {
-            setMyRequests(res.data)
+            setMyRequests(res.data?.request || [])
+            setTotalMyRequests(res.data?.totalMyReq || 0)
         })
         .catch(err => {
             console.log(err)
         })
-    },[axiosInstance, user?.email])
+    },[axiosSecure, currentPage, itemsPerPage, user?.email])
+    console.log(myRequests)
+    //console.log(totalMyRequests)
+
+    //Pagination
+    const numberOfPages =
+    itemsPerPage > 0
+      ? Math.ceil(totalMyRequests / itemsPerPage)
+      : 0;
+    
+      const pages = numberOfPages > 0
+    ? [...Array(numberOfPages).keys()].map(i => i + 1)
+    : [];
+
+    // handling prev and next
+    const handlePrev = () => {
+      if(currentPage > 1){
+        setCurrentPage(currentPage-1)
+      }
+    }
+
+    const handleNext = () => {
+      if(currentPage < pages.length){
+        setCurrentPage(currentPage+1)
+      }
+    }
   return (
     <div className="max-w-6xl mx-auto">
       <title>My Donation Requests</title>
@@ -51,7 +80,7 @@ const MyRequests = () => {
 
             {/* Request Row */}
             {
-                myRequests?.map(myRequest =>
+                myRequests?.map(myRequest => (
                     <tr className="hover:bg-gray-50">
                     <td className="px-4 py-3">{myRequest?.recipientName}</td>
                     <td className="px-4 py-3 font-medium text-red-600">{myRequest?.bloodGroup}</td>
@@ -84,12 +113,21 @@ const MyRequests = () => {
                         </button>
                     </td>
                     </tr>
-                )
+                ))
             }
 
             
           </tbody>
         </table>
+      </div>
+      <div className="flex justify-center mt-15 gap-5">
+        <button onClick={handlePrev} className="btn">Prev</button>
+        {
+          pages.map(page => (
+            <button className={`btn ${page === currentPage ? 'bg-[#435585] text-white' : ''}`} onClick={() => setCurrentPage(page)}>{page}</button>
+          ))
+        }
+        <button onClick={handleNext} className="btn">Next</button>
       </div>
     </div>
   );
