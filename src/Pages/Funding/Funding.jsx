@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import useAxios from "../../hooks/useAxios";
 import { AuthContext } from "../../Provider/AuthProvider";
 
@@ -7,6 +7,31 @@ const Funding = () => {
 
     const axiosInstance = useAxios()
     const {user} = useContext(AuthContext)
+    const [allFundings, setAllFundings] = useState([])
+
+
+    const totalAmount = allFundings.reduce((accumulator, current) => {
+        return accumulator + parseFloat(current?.amount || 0);
+    }, 0);
+
+    const formatDate = (dateString) => {
+    if (!dateString) return "-";
+    return new Date(dateString).toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      });
+    };
+
+    useEffect(() => {
+                axiosInstance.get(`/fundings`)
+                .then(res => {
+                    setAllFundings(res.data)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+            },[axiosInstance])
     
     const handleCheckOut = (e) => {
         e.preventDefault();
@@ -56,13 +81,10 @@ const Funding = () => {
       {/* Summary Card */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <div className="bg-white border rounded-lg p-5 shadow-sm">
-          <p className="text-sm text-gray-500">Total Funds Collected</p>
+          <p className="text-m text-gray-500">Total Funds Collected</p>
           <h2 className="text-3xl font-bold text-red-600 mt-2">
-            $ 125,000
+            ${totalAmount.toLocaleString()}
           </h2>
-          <p className="text-xs text-gray-400 mt-1">
-            Updated automatically
-          </p>
         </div>
       </div>
 
@@ -79,13 +101,18 @@ const Funding = () => {
 
           <tbody className="divide-y">
             {/* Row */}
-            <tr className="hover:bg-gray-50">
-              <td className="px-4 py-3 font-medium">Rahim Uddin</td>
-              <td className="px-4 py-3 text-green-600 font-semibold">
-                $ 5,000
-              </td>
-              <td className="px-4 py-3">12 Jan 2025</td>
-            </tr>
+            {
+              allFundings.map(allFunding =>(
+                <tr className="hover:bg-gray-50">
+                <td className="px-4 py-3 font-medium">{allFunding?.donorName}</td>
+                <td className="px-4 py-3 text-green-600 font-semibold">
+                  $ {allFunding?.amount}
+                </td>
+                <td className="px-4 py-3">{formatDate(allFunding?.paidAt)}</td>
+                </tr>
+              ))
+            }
+            
           </tbody>
         </table>
       </div>
