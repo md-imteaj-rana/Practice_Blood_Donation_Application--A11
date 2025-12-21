@@ -21,7 +21,7 @@ const MyRequests = () => {
             console.log(err)
         })
     },[axiosSecure, currentPage, itemsPerPage, user?.email])
-    console.log(myRequests)
+    //console.log(myRequests)
     //console.log(totalMyRequests)
 
     //Pagination

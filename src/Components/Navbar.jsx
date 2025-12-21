@@ -55,9 +55,6 @@ const Navbar = () => {
             Home
           </NavLink>
 
-          <NavLink to="/SearchRequest" className={navLinkClass}>
-            Search
-          </NavLink>
 
           <NavLink to="/donation-requests" className={navLinkClass}>
             Donation Requests
@@ -127,14 +124,6 @@ const Navbar = () => {
             className={navLinkClass}
           >
             Home
-          </NavLink>
-
-          <NavLink
-            to="/SearchRequest"
-            onClick={() => setMobileOpen(false)}
-            className={navLinkClass}
-          >
-            Search
           </NavLink>
 
           <NavLink

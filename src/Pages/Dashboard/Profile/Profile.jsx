@@ -1,7 +1,34 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../../../Provider/AuthProvider";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const Profile = () => {
+  const {user} = useContext(AuthContext)
+  const axiosSecure = useAxiosSecure()
+
+  const [currUser, setCurrUser] = useState();
+
   const [isEditing, setIsEditing] = useState(false);
+
+  useEffect(() => {
+          axiosSecure.get(`/users/${user?.email}`)
+          .then(res => {
+              setCurrUser(res.data)
+              console.log(res.data)
+          })
+          .catch(err => {
+              console.log(err)
+          })
+      },[axiosSecure, user?.email])
+
+  const handleProfile = (email, photoURL, name, bloodGroup, district, upazila) => {
+    const profileData = { photoURL, name, bloodGroup, district, upazila };
+    axiosSecure.patch(`/update/user?email=${email}`, profileData)
+      .then(res => {
+        console.log("Profile updated", res.data);
+      })
+      .catch(err => console.error(err));
+  }
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -29,12 +56,12 @@ const Profile = () => {
       </div>
 
       {/* Profile Form */}
-      <form className="bg-white border rounded-lg shadow-sm p-6 space-y-5">
+      <form onSubmit={handleProfile} className="bg-white border rounded-lg shadow-sm p-6 space-y-5">
 
         {/* Avatar */}
         <div className="flex items-center gap-6">
           <img
-            src="https://i.ibb.co/9gL7wzM/user.png"
+            src={currUser?.photoURL}
             alt="Avatar"
             className="w-24 h-24 rounded-full border object-cover"
           />
@@ -71,7 +98,7 @@ const Profile = () => {
                   ? "bg-gray-100 cursor-not-allowed"
                   : "focus:ring-2 focus:ring-red-500"
               }`}
-              value="Imte Hasan"
+              value={currUser?.name}
               readOnly={!isEditing}
             />
           </div>
@@ -84,7 +111,7 @@ const Profile = () => {
               type="email"
               disabled
               className="w-full px-4 py-2 border rounded-md bg-gray-100 cursor-not-allowed"
-              value="imte@email.com"
+              value={currUser?.email}
             />
           </div>
         </div>
@@ -127,7 +154,7 @@ const Profile = () => {
                   ? "bg-gray-100 cursor-not-allowed"
                   : "focus:ring-2 focus:ring-red-500"
               }`}
-              value="Dhaka"
+              value={currUser?.district}
               readOnly={!isEditing}
             />
           </div>
@@ -144,7 +171,7 @@ const Profile = () => {
                   ? "bg-gray-100 cursor-not-allowed"
                   : "focus:ring-2 focus:ring-red-500"
               }`}
-              value="Mirpur"
+              value={currUser?.upazila}
               readOnly={!isEditing}
             />
           </div>
@@ -154,7 +181,7 @@ const Profile = () => {
         {isEditing && (
           <div className="text-right pt-4">
             <button
-              type="button"
+              type="submit"
               onClick={() => setIsEditing(false)}
               className="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700"
             >
