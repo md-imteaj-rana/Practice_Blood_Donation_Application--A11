@@ -42,7 +42,7 @@ const Register = () => {
     const district = districts.find(d => d.id == distId)
     setSelectedDistricts(district)
     setSelectedUpazia(resultUpa)
-    console.log(resultUpa)
+    //console.log(resultUpa)
   };
   const handleSubmit = async (e) => {
     e.preventDefault();

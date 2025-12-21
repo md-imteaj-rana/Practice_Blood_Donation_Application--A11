@@ -13,12 +13,14 @@ import Profile from "../Pages/Dashboard/Profile/Profile";
 import AllUsers from "../Pages/Dashboard/AllUsers/AllUsers";
 import Funding from "../Pages/Funding/Funding";
 import PaymentSuccess from "../Pages/PaymentSuccess/PaymentSuccess";
+import SearchRequest from "../Pages/SearchRequest/SearchRequest";
 
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <RootLayout></RootLayout>,
+    errorElement: <Error></Error>,
     children:[
         {
             path: '/',
@@ -39,6 +41,10 @@ const router = createBrowserRouter([
         {
             path: '/payment-success',
             element: <PrivateRoutes><PaymentSuccess></PaymentSuccess></PrivateRoutes>
+        },
+        {
+            path: '/SearchRequest',
+            element: <SearchRequest></SearchRequest>
         }
         
     ]

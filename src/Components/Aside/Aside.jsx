@@ -71,6 +71,7 @@ const DashboardAside = () => {
         <h1 className="text-2xl font-bold text-red-600">
           Blood<span className="text-gray-800">Connect</span>
         </h1>
+        <p className="text-xs text-gray-500 mt-1">Click here to go back to home</p>
         <p className="text-xs text-gray-500 mt-1">
           Dashboard Panel
         </p>
