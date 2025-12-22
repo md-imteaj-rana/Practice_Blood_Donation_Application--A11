@@ -18,7 +18,7 @@ const Home = () => {
     <div className="w-full">
       <title>Home</title>
 
-      {/* ================= Banner Section ================= */}
+      {/* Banner Section */}
       <section className="bg-linear-to-r from-red-600 to-red-700 text-white">
         <div className="max-w-7xl mx-auto px-6 py-20 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
           
@@ -54,7 +54,7 @@ const Home = () => {
           {/* Image */}
           <div className="hidden md:block">
             <img
-              src="/public/Blood-donation-logo-vector.jpg"
+              src="./public/Blood-donation-logo-vector.jpg"
               alt="Blood Donation"
               className="w-full max-w-md mx-auto rounded-2xl"
             />
@@ -62,7 +62,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ================= Featured Section ================= */}
+      {/* Featured Section */}
       <section className="bg-gray-50 py-16">
         <div className="max-w-7xl mx-auto px-6">
           

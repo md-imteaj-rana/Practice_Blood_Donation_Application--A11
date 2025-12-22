@@ -15,7 +15,7 @@ const RequestDetails = () => {
   /* FETCH REQUEST DETAILS */
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/requestsdetails/${id}`)
+      .get(`https://blood-connect-a11.vercel.app/requestsdetails/${id}`)
       .then((res) => setRequest(res.data))
       .catch(console.log);
   }, [id]);
@@ -23,7 +23,7 @@ const RequestDetails = () => {
   /* CONFIRM DONATION */
   const handleConfirmDonation = () => {
     axios
-      .patch(`http://localhost:5000/requestsdetails/${id}`, {
+      .patch(`https://blood-connect-a11.vercel.app/requestsdetails/${id}`, {
         donationStatus: "inprogress",
         donorName: user?.displayName,
         donorEmail: user?.email,

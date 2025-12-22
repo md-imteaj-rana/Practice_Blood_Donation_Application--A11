@@ -22,7 +22,7 @@ const AllRequests = () => {
     if (!user?.email) return;
 
     axios
-      .get(`http://localhost:5000/usersdelete/role/${user.email}`)
+      .get(`https://blood-connect-a11.vercel.app/usersdelete/role/${user.email}`)
       .then((res) => setRole(res.data.role))
       .catch(console.log);
   }, [user?.email]);

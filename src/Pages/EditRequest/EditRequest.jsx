@@ -20,7 +20,7 @@ const EditRequest = () => {
     if (!user?.email) return;
 
     axios
-      .get(`http://localhost:5000/users/role/${user.email}`)
+      .get(`https://blood-connect-a11.vercel.app/users/role/${user.email}`)
       .then((res) => setRole(res.data.role))
       .catch(console.log);
   }, [user?.email]);

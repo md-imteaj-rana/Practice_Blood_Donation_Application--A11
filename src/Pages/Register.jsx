@@ -123,7 +123,7 @@ const Register = () => {
             .then(() => {
               setUser(userCredential.user);
               axios
-                .post("http://localhost:5000/users", formData)
+                .post("https://blood-connect-a11.vercel.app/users", formData)
                 .then((res) => {
                   console.log(res.data);
                 })
