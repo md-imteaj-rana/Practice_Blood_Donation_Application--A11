@@ -46,7 +46,11 @@ const DashboardAside = () => {
                 <Link to={'/Dashboard/all-users'}><a>All Users</a></Link>
               )
             }
-            <Link to={'/Dashboard/all-request'}><a>All Requests</a></Link>
+            {
+              role !== 'donor' && (
+                <Link to={'/Dashboard/all-request'}><a>All Requests</a></Link>
+              )
+            }
             
           </ul>
         </div>
@@ -147,7 +151,8 @@ const DashboardAside = () => {
         }
 
         {/* All Blood Donation Requests */}
-        <NavLink
+        {role !== "donor" && (
+          <NavLink
           to="/Dashboard/all-request"
           className={({ isActive }) =>
             `${navItemStyle} ${isActive ? activeStyle : ""}`
@@ -156,6 +161,7 @@ const DashboardAside = () => {
           <Droplet size={20} />
           All Requests
         </NavLink>
+        )}
 
       </nav>
     </aside>

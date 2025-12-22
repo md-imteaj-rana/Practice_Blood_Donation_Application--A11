@@ -20,7 +20,7 @@ const MainDashboard = () => {
   });
 
   useEffect(() => {
-  if (role !== "admin") return;
+  if (role == "donor") return;
 
   axiosSecure.get("/admin/stats").then(res => {
     setStats(res.data);
@@ -196,11 +196,9 @@ const MainDashboard = () => {
             </div>
           )}
           </>
-      )
-        
-      }
+      )}
 
-      {role == "admin" || role == "volunteer" && (
+      {role == "admin" && (
         <>
           {/* Admin  */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -213,7 +211,7 @@ const MainDashboard = () => {
               <div>
                 <p className="text-sm text-gray-500">Total Donors</p>
                 <h2 className="text-3xl font-bold text-gray-800">
-                  {stats.totalDonors}
+                  {stats?.totalDonors}
                 </h2>
               </div>
             </div>
@@ -226,7 +224,7 @@ const MainDashboard = () => {
               <div>
                 <p className="text-sm text-gray-500">Total Funding</p>
                 <h2 className="text-3xl font-bold text-gray-800">
-                  $ {stats.totalFunding}
+                  $ {stats?.totalFunding}
                 </h2>
               </div>
             </div>
@@ -239,7 +237,54 @@ const MainDashboard = () => {
               <div>
                 <p className="text-sm text-gray-500">Blood Requests</p>
                 <h2 className="text-3xl font-bold text-gray-800">
-                  {stats.totalRequests}
+                  {stats?.totalRequests}
+                </h2>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+
+      {role == "volunteer" && (
+        <>
+          {/* Admin  */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            {/* Total Donors */}
+            <div className="bg-white rounded-lg shadow-sm border p-6 flex items-center gap-5">
+              <div className="w-14 h-14 flex items-center justify-center rounded-full bg-red-100 text-red-600 text-2xl">
+                🧑‍🤝‍🧑
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">Total Donors</p>
+                <h2 className="text-3xl font-bold text-gray-800">
+                  {stats?.totalDonors}
+                </h2>
+              </div>
+            </div>
+
+            {/* Total Funding */}
+            <div className="bg-white rounded-lg shadow-sm border p-6 flex items-center gap-5">
+              <div className="w-14 h-14 flex items-center justify-center rounded-full bg-green-100 text-green-600 text-2xl">
+                💰
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">Total Funding</p>
+                <h2 className="text-3xl font-bold text-gray-800">
+                  $ {stats?.totalFunding}
+                </h2>
+              </div>
+            </div>
+
+            {/* Total Requests */}
+            <div className="bg-white rounded-lg shadow-sm border p-6 flex items-center gap-5">
+              <div className="w-14 h-14 flex items-center justify-center rounded-full bg-blue-100 text-blue-600 text-2xl">
+                🩸
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">Blood Requests</p>
+                <h2 className="text-3xl font-bold text-gray-800">
+                  {stats?.totalRequests}
                 </h2>
               </div>
             </div>

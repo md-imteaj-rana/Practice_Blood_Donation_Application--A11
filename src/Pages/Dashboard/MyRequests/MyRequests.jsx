@@ -2,121 +2,142 @@ import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../Provider/AuthProvider";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { Link } from "react-router";
+import Swal from "sweetalert2";
 
 const MyRequests = () => {
   const [myRequests, setMyRequests] = useState([]);
   const [totalMyRequests, setTotalMyRequests] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
-  const [statusFilter, setStatusFilter] = useState("all"); // filter state
+  const [statusFilter, setStatusFilter] = useState("all");
+
   const axiosSecure = useAxiosSecure();
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
+    if (!user?.email) return;
+
     axiosSecure
-      .get(`/requests/${user?.email}?page=${currentPage - 1}&size=${itemsPerPage}`)
+      .get(`/requests/${user.email}?page=${currentPage - 1}&size=${itemsPerPage}`)
       .then((res) => {
         setMyRequests(res.data?.request || []);
         setTotalMyRequests(res.data?.totalMyReq || 0);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch(console.error);
   }, [axiosSecure, currentPage, itemsPerPage, user?.email]);
 
+  // DELETE HANDLER
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "This request will be permanently deleted!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosSecure.delete(`/deletemyrequests/${id}`).then((res) => {
+          if (res.data.deletedCount > 0) {
+            Swal.fire("Deleted!", "Your request has been deleted.", "success");
+
+            //  Update instantly
+            setMyRequests((prev) =>
+              prev.filter((request) => request._id !== id)
+            );
+            setTotalMyRequests((prev) => prev - 1);
+          }
+        });
+      }
+    });
+  };
+
   // Pagination
-  const numberOfPages = itemsPerPage > 0 ? Math.ceil(totalMyRequests / itemsPerPage) : 0;
-  const pages = numberOfPages > 0 ? [...Array(numberOfPages).keys()].map((i) => i + 1) : [];
+  const numberOfPages = Math.ceil(totalMyRequests / itemsPerPage);
+  const pages = [...Array(numberOfPages).keys()].map((i) => i + 1);
 
-  const handlePrev = () => {
-    if (currentPage > 1) setCurrentPage(currentPage - 1);
-  };
-
-  const handleNext = () => {
-    if (currentPage < pages.length) setCurrentPage(currentPage + 1);
-  };
-
-  // Filtered requests
   const filteredRequests =
-    statusFilter == "all"
+    statusFilter === "all"
       ? myRequests
-      : myRequests.filter((req) => req.donationStatus == statusFilter);
+      : myRequests.filter(
+          (req) => req.donationStatus === statusFilter
+        );
 
   return (
     <div className="max-w-6xl mx-auto">
-      <title>My Donation Requests</title>
-
-      {/* Page Header */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-semibold text-gray-800">My Donation Requests</h1>
-        <p className="text-sm text-gray-500 mt-1">Track and manage your blood donation requests.</p>
-      </div>
+      <h1 className="text-2xl font-semibold mb-4">My Donation Requests</h1>
 
       {/* Filter Buttons */}
       <div className="flex gap-2 mb-4">
         {["all", "Pending", "inprogress", "done", "canceled"].map((status) => (
           <button
             key={status}
+            onClick={() => setStatusFilter(status)}
             className={`px-3 py-1 rounded ${
               statusFilter === status
                 ? "bg-[#435585] text-white"
-                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                : "bg-gray-200"
             }`}
-            onClick={() => setStatusFilter(status)}
           >
-            {status.charAt(0).toUpperCase() + status.slice(1)}
+            {status}
           </button>
         ))}
       </div>
 
-      {/* Table Card */}
-      <div className="bg-white border rounded-lg shadow-sm overflow-x-auto">
+      {/* Table */}
+      <div className="bg-white border rounded shadow overflow-x-auto">
         <table className="w-full text-sm">
-          <thead className="bg-red-50 text-gray-700">
+          <thead className="bg-red-50">
             <tr>
-              <th className="px-4 py-3 text-left">Recipient</th>
-              <th className="px-4 py-3 text-left">Blood Group</th>
-              <th className="px-4 py-3 text-left">Location</th>
-              <th className="px-4 py-3 text-left">Donation Date</th>
-              <th className="px-4 py-3 text-left">Donor Info</th>
-              <th className="px-4 py-3 text-left">Status</th>
-              <th className="px-4 py-3 text-center">Actions</th>
+              <th className="px-4 py-2 text-left">Recipient</th>
+              <th className="px-4 py-2">Blood</th>
+              <th className="px-4 py-2">Location</th>
+              <th className="px-4 py-2">Date</th>
+              <th className="px-4 py-2">Donor</th>
+              <th className="px-4 py-2">Status</th>
+              <th className="px-4 py-2 text-center">Actions</th>
             </tr>
           </thead>
 
-          <tbody className="divide-y">
-            {filteredRequests?.map((myRequest) => (
-              <tr key={myRequest._id} className="hover:bg-gray-50">
-                <td className="px-4 py-3">{myRequest?.recipientName}</td>
-                <td className="px-4 py-3 font-medium text-red-600">{myRequest?.bloodGroup}</td>
-                <td className="px-4 py-3">
-                  {myRequest?.recipientDistrict},<br />
-                  {myRequest?.recipientUpazila}
+          <tbody>
+            {filteredRequests.map((req) => (
+              <tr key={req._id} className="border-t hover:bg-gray-50">
+                <td className="px-4 py-2">{req.recipientName}</td>
+                <td className="px-4 py-2 text-red-600 font-bold">
+                  {req.bloodGroup}
                 </td>
-                <td className="px-4 py-3">{myRequest?.date}</td>
-
-                {/* Donor Info */}
-                <td className="px-4 py-3 text-gray-600">
-                  <p className="font-medium">{myRequest?.requesterName}</p>
-                  <p className="text-xs">{myRequest?.requesterEmail}</p>
+                <td className="px-4 py-2">
+                  {req.recipientDistrict}, {req.recipientUpazila}
                 </td>
-
-                {/* Status */}
-                <td className="px-4 py-3">
-                  <span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">
-                    {myRequest?.donationStatus}
+                <td className="px-4 py-2">{req.date}</td>
+                <td className="px-4 py-2">
+                  <p>{req.requesterName}</p>
+                  <p className="text-xs">{req.requesterEmail}</p>
+                </td>
+                <td className="px-4 py-2">
+                  <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">
+                    {req.donationStatus}
                   </span>
                 </td>
 
                 {/* Actions */}
-                <td className="px-4 py-3 text-center space-x-2">
-                  <Link to={`/RequestDetails/${myRequest?._id}`} className="px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700">
+                <td className="px-4 py-2 text-center space-x-2">
+                  <Link
+                    to={`/RequestDetails/${req._id}`}
+                    className="px-2 py-1 bg-blue-600 text-white text-xs rounded"
+                  >
                     View
                   </Link>
-                  <Link to={`/EditRequests/${myRequest?._id}`} className="px-3 py-1 text-xs bg-green-600 text-white rounded hover:bg-green-700">
+                  <Link
+                    to={`/EditRequests/${req._id}`}
+                    className="px-2 py-1 bg-green-600 text-white text-xs rounded"
+                  >
                     Edit
                   </Link>
-                  <button className="px-3 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700">
+                  <button
+                    onClick={() => handleDelete(req._id)}
+                    className="px-2 py-1 bg-red-600 text-white text-xs rounded"
+                  >
                     Delete
                   </button>
                 </td>
@@ -127,22 +148,18 @@ const MyRequests = () => {
       </div>
 
       {/* Pagination */}
-      <div className="flex justify-center mt-6 gap-5">
-        <button onClick={handlePrev} className="btn">
-          Prev
-        </button>
+      <div className="flex justify-center gap-2 mt-6">
         {pages.map((page) => (
           <button
             key={page}
-            className={`btn ${page === currentPage ? "bg-[#435585] text-white" : ""}`}
             onClick={() => setCurrentPage(page)}
+            className={`btn ${
+              page === currentPage ? "bg-[#435585] text-white" : ""
+            }`}
           >
             {page}
           </button>
         ))}
-        <button onClick={handleNext} className="btn">
-          Next
-        </button>
       </div>
     </div>
   );

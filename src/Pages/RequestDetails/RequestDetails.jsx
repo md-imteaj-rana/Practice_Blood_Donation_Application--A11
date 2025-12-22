@@ -2,28 +2,25 @@ import React, { useContext, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router";
 import { AuthContext } from "../../Provider/AuthProvider";
 import Swal from "sweetalert2";
-import axios, { Axios } from "axios";
+import axios from "axios";
 
 const RequestDetails = () => {
   const { id } = useParams();
   const { user } = useContext(AuthContext);
-  //const axiosInstance = useAxios();
   const navigate = useNavigate();
 
   const [request, setRequest] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
 
-  // 🔹 Fetch request details
+  /* FETCH REQUEST DETAILS */
   useEffect(() => {
     axios
       .get(`http://localhost:5000/requestsdetails/${id}`)
-      .then((res) => {
-        setRequest(res?.data);
-      })
-      .catch((err) => console.log(err));
+      .then((res) => setRequest(res.data))
+      .catch(console.log);
   }, [id]);
 
-  //  Confirm Donation
+  /* CONFIRM DONATION */
   const handleConfirmDonation = () => {
     axios
       .patch(`http://localhost:5000/requestsdetails/${id}`, {
@@ -32,48 +29,47 @@ const RequestDetails = () => {
         donorEmail: user?.email,
       })
       .then(() => {
-        Swal.fire({
-          icon: "success",
-          title: "Donation Confirmed",
-          text: "You have successfully accepted this donation request.",
-        });
+        Swal.fire(
+          "Donation Confirmed ❤️",
+          "You have accepted this donation request.",
+          "success"
+        );
         setIsOpen(false);
         navigate("/dashboard/my-requests");
       })
-      .catch((err) => console.log(err));
+      .catch(console.log);
   };
 
   if (!request) {
-    return <div className="text-center py-20">Loading...</div>;
+    return <div className="text-center py-20 text-lg">Loading...</div>;
   }
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-10">
-      <title>Request Details</title>
+      <title>Donation Request Details</title>
 
-      {/* Request Details */}
+      {/* REQUEST DETAILS CARD */}
       <div className="bg-white shadow rounded-lg overflow-hidden">
         <div className="bg-red-600 text-white px-6 py-4">
           <h2 className="text-2xl font-bold">Donation Request Details</h2>
         </div>
 
         <div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-6 text-gray-700">
-          <Detail label="Recipient Name" value={request?.recipientName} />
-          <Detail label="Blood Group" value={request?.bloodGroup} highlight />
-          <Detail label="Location" value={request?.address} />
-          <Detail label="Hospital Name" value={request?.hospital} />
-          <Detail label="Date" value={request?.date} />
-          <Detail label="Time" value={request?.time} />
+          <Detail label="Recipient Name" value={request.recipientName} />
+          <Detail label="Blood Group" value={request.bloodGroup} highlight />
           <Detail
-            label="Status"
-            value={request?.donationStatus}
-            status
+            label="Location"
+            value={`${request.recipientDistrict}, ${request.recipientUpazila}`}
           />
-          <Detail label="Additional Info" value={request?.message || "N/A"} />
+          <Detail label="Hospital Name" value={request.hospitalName || "N/A"} />
+          <Detail label="Donation Date" value={request.date} />
+          <Detail label="Donation Time" value={request.time} />
+          <Detail label="Status" value={request.donationStatus} status />
+          <Detail label="Additional Message" value={request.message || "N/A"} />
         </div>
 
-        {/* Donate Button */}
-        {request?.donationStatus === "pending" && (
+        {/* DONATE BUTTON */}
+        {request.donationStatus === "Pending" && (
           <div className="px-6 pb-6">
             <button
               onClick={() => setIsOpen(true)}
@@ -85,38 +81,17 @@ const RequestDetails = () => {
         )}
       </div>
 
-      {/* Modal */}
+      {/* DONATION MODAL */}
       {isOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg w-full max-w-md p-6">
             <h3 className="text-xl font-bold text-gray-800 mb-4">
               Confirm Donation
             </h3>
 
             <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-600">
-                  Donor Name
-                </label>
-                <input
-                  type="text"
-                  value={user?.displayName}
-                  readOnly
-                  className="w-full border px-3 py-2 rounded-md bg-gray-100"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-600">
-                  Donor Email
-                </label>
-                <input
-                  type="email"
-                  value={user?.email}
-                  readOnly
-                  className="w-full border px-3 py-2 rounded-md bg-gray-100"
-                />
-              </div>
+              <Input label="Donor Name" value={user?.displayName} />
+              <Input label="Donor Email" value={user?.email} />
             </div>
 
             <div className="mt-6 flex gap-3">
@@ -146,10 +121,33 @@ const Detail = ({ label, value, highlight, status }) => (
     <p
       className={`mt-1 font-semibold ${
         highlight ? "text-red-600 text-lg" : ""
-      } ${status && value === "pending" ? "text-yellow-600" : ""}`}
+      } ${
+        status && value === "Pending"
+          ? "text-yellow-600"
+          : status && value === "inprogress"
+          ? "text-blue-600"
+          : status && value === "done"
+          ? "text-green-600"
+          : status && value === "canceled"
+          ? "text-red-600"
+          : ""
+      }`}
     >
       {value}
     </p>
+  </div>
+);
+
+const Input = ({ label, value }) => (
+  <div>
+    <label className="block text-sm font-medium text-gray-600 mb-1">
+      {label}
+    </label>
+    <input
+      value={value || ""}
+      readOnly
+      className="w-full border px-3 py-2 rounded-md bg-gray-100"
+    />
   </div>
 );
 
