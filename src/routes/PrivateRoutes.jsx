@@ -16,7 +16,7 @@ const PrivateRoutes = ({children}) => {
         return children
     }
 
-    return <Navigate state={location.pathname} to='/Login'></Navigate>
+    return <Navigate state={location?.pathname} to='/Login'></Navigate>
 
 };
 

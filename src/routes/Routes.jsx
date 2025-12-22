@@ -14,6 +14,9 @@ import AllUsers from "../Pages/Dashboard/AllUsers/AllUsers";
 import Funding from "../Pages/Funding/Funding";
 import PaymentSuccess from "../Pages/PaymentSuccess/PaymentSuccess";
 import SearchRequest from "../Pages/SearchRequest/SearchRequest";
+import DonationRequests from "../Pages/DonationRequests/DonationRequests";
+import RequestDetails from "../Pages/RequestDetails/RequestDetails";
+import EditRequest from "../Pages/EditRequest/EditRequest";
 
 
 const router = createBrowserRouter([
@@ -45,6 +48,18 @@ const router = createBrowserRouter([
         {
             path: '/SearchRequest',
             element: <SearchRequest></SearchRequest>
+        },
+        {
+            path: '/DonationRequests',
+            element: <DonationRequests></DonationRequests>
+        },
+        {
+            path: '/RequestDetails/:id',
+            element: <PrivateRoutes><RequestDetails></RequestDetails></PrivateRoutes>
+        },
+        {
+            path: '/EditRequests/:id',
+            element: <PrivateRoutes><EditRequest></EditRequest></PrivateRoutes>
         }
         
     ]

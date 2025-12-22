@@ -56,7 +56,7 @@ const Navbar = () => {
           </NavLink>
 
 
-          <NavLink to="/donation-requests" className={navLinkClass}>
+          <NavLink to="/DonationRequests" className={navLinkClass}>
             Donation Requests
           </NavLink>
 
@@ -80,7 +80,7 @@ const Navbar = () => {
             <div className="relative hidden md:block" ref={dropdownRef}>
               <button onClick={() => setOpen(!open)}>
                 <img
-                  src={user.photoURL || "https://i.ibb.co/2kR7G6C/user.png"}
+                  src={user?.photoURL || "https://i.ibb.co/2kR7G6C/user.png"}
                   alt="avatar"
                   className="w-10 h-10 rounded-full border-2 border-red-500"
                 />
@@ -127,7 +127,7 @@ const Navbar = () => {
           </NavLink>
 
           <NavLink
-            to="/donation-requests"
+            to="/DonationRequests"
             onClick={() => setMobileOpen(false)}
             className={navLinkClass}
           >

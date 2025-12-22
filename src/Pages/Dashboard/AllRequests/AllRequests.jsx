@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import useAxios from "../../../hooks/useAxios";
+import { Link } from "react-router";
 
 const AllRequests = () => {
 
@@ -17,7 +18,7 @@ const AllRequests = () => {
         },[axiosInstance])
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-0">
-      <title>All Blood Donation Requests</title>
+      <title>All Requests</title>
 
       {/* Page Header */}
       <div className="mb-6">
@@ -73,12 +74,12 @@ const AllRequests = () => {
                     {/* Actions */}
                     <td className="px-4 py-3 text-center">
                         <div className="flex flex-col sm:flex-row justify-center gap-2">
-                        <button className="px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700">
+                        <Link to={`/RequestDetails/${allRequest?._id}`} className="px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700">
                             View
-                        </button>
-                        <button className="px-3 py-1 text-xs bg-green-600 text-white rounded hover:bg-green-700">
+                        </Link>
+                        <Link to={`/EditRequests/${allRequest?._id}`}  className="px-3 py-1 text-xs bg-green-600 text-white rounded hover:bg-green-700">
                             Edit
-                        </button>
+                        </Link>
                         <button className="px-3 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700">
                             Delete
                         </button>
