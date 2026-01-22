@@ -54,7 +54,7 @@ const Home = () => {
           {/* Image */}
           <div className="hidden md:block">
             <img
-              src="./public/Blood-donation-logo-vector.jpg"
+              src="https://i.ibb.co.com/h6x4FKQ/Blood-donation-logo-vector.jpg"
               alt="Blood Donation"
               className="w-full max-w-md mx-auto rounded-2xl"
             />
